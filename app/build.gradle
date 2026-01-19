@@ -26,7 +26,7 @@ android {
 
 dependencies {
     // Include the j4rs to the apk
-    implementation 'io.github.astonbitecode:j4rs:0.21.0'
+    implementation 'io.github.astonbitecode:j4rs:0.24.0'
 }
 
 task buildRust {
