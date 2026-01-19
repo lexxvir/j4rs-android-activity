@@ -16,18 +16,18 @@ fn test(app: &AndroidApp) {
         .build()
         .unwrap();
 
-    let string_instance = jvm.create_instance(
-        "java.lang.String",
-        InvocationArg::empty(),
-    ).unwrap();
-    let boolean_instance = jvm.invoke(
-        &string_instance,
-        "isEmpty",
-        InvocationArg::empty(),
-      ).unwrap();
-      
-      let rust_boolean: bool = jvm.to_rust(boolean_instance).unwrap();
-      println!("=======================Use in main thread {rust_boolean}");
+    let string_instance = jvm
+        .create_instance("java.lang.String", InvocationArg::empty())
+        .unwrap();
+
+    for _ in 0.. {
+        let boolean_instance = jvm
+            .invoke(&string_instance, "isEmpty", InvocationArg::empty())
+            .unwrap();
+    }
+
+    //let rust_boolean: bool = jvm.to_rust(boolean_instance).unwrap();
+    //println!("=======================Use in main thread {rust_boolean}");
 
     let handle = std::thread::spawn(move || {
         // After the initial Jvm creation, Jvm instances can be created by simply attaching to the thread
@@ -41,9 +41,9 @@ fn test(app: &AndroidApp) {
             "isEmpty",
             InvocationArg::empty(),
           ).unwrap();
-          
-          let rust_boolean: bool = other_jvm.to_rust(boolean_instance).unwrap();
-          println!("=======================Use in new thread: {rust_boolean}");
+
+        let rust_boolean: bool = other_jvm.to_rust(boolean_instance).unwrap();
+        println!("=======================Use in new thread: {rust_boolean}");
     });
     handle.join().unwrap();
     
